@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery Sprint 4</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<script type="text/html" id="tpl">
+    <tr data-id="<%=id%>">
+        <td><%=city%></td>
+        <td><%=stars%></td>
+        <td><%=visited%></td>
+        <td>
+            <a href="#" class="btn btn-info">Edit</a>
+            <a href="#" class="btn btn-danger delete">Remove</a>
+        </td>
+    </tr>
+
+</script>
+<div class="container lead">
+    <div class="col-md-4">
+        <form role="form" class="form">
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="city" placeholder="City">
+            </div>
+            <div class="form-group">
+                <label for="stars">Stars</label>
+                <input  class="form-control" id="stars">
+            </div>
+            <div class="checkbox">
+                <label><input type="checkbox" class="visited">Visited</label>
+            </div>
+            <button type="submit" class="btn btn-default">Save</button>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>City</th>
+                <th>Stars</th>
+                <th>Checked</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="js/template.js"></script>
+<script type="text/javascript" src="js/store.js"></script>
+<script type=" text/javascript" src="js/main.js"></script>
+</body>
+</html>
