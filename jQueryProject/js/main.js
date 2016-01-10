@@ -13,7 +13,7 @@ var getFormData = function() {
     var data = {
         city: $('#city').val(),
         stars: $('#stars').val(),
-        visited: $('.visited').val()
+        visited: $('.visited').prop('checked')
     };
     return data;
 };
@@ -31,18 +31,34 @@ var drawTable = function(store) {
     });
 };
 
-$(document).ready(function(){
-    drawTable(store);
-    $('form').submit(onSubmit);
-});
 
 var attachEvents = function(){
+    $('.delete').confirmDelete({
+        message:'Are you sure?',
+        onConfirm: function() {
+            alert('yes!');
+        },
+        onReject: function() {
+            alert('no!');
+        }
+    });
     $('.delete').on('click', function(){
         var id = $(this).closest('tr').data('id');
+
         store.delete(id).then(function(){
             drawTable(store);
         });
 
         return false;
     });
+
 };
+
+$(function() {
+    $('#stars').stars();
+});
+
+$(document).ready(function(){
+    drawTable(store);
+    $('form').submit(onSubmit);
+});
