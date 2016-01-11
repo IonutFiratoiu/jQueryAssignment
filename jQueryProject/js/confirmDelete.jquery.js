@@ -17,7 +17,7 @@ $.fn.confirmDelete = function(options) {
                     options.onConfirm.call(this);
                 }else{
                     options.onReject.call(this);
-                }
+                };
 
                 return false;
             })

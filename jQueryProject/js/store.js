@@ -21,71 +21,69 @@ var store = (function () {
         type: 'GET',
         headers: {
             'Content-Type': 'application/json'
-        },
-        data: $.map(Object, function(e) { return e.val(); })
+        }
     };
 
-    var postSettings = {
-        type: 'POST',
+    var deleteSettings = {
+        type: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
-        },
-        data: JSON.stringify(store)
+        }
     };
 
     //public
     return {
         getAll: function () {
             return new Promise(function (resolve, reject) {
-                var get = $.ajax(entryURL, getSettings).done(function(){
-                    $.ajax(entryURL).done(function(data){
-                        return data;
-                    })
-                })
-                resolve(get);
-                console.log(get);
+                $.ajax(entryURL, getSettings).done(function(data){
+                    resolve(data.list);
+                });
+            });
+        },
+        get: function (id) {
+            return new Promise(function (resolve, reject) {
+                $.ajax(entryURL + '/' + id, getSettings).done(function(data){
+                    resolve(data.list);
+                });
             });
         },
         add: function (item) {
             return new Promise(function (resolve, reject) {
-                var post = $.ajax(entryURL, postSettings).done(function(){
+                $.ajax(entryURL, {
+                    type: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify(item)
+                }).done(function(){
                     $.ajax(entryURL).done(function(data){
-                        return data;
+                        //data.push(item);
+                        resolve(data);
                     })
+                }).error(function(xhr){
+                    reject(xhr.responseJSON);
                 });
-                //data.push(item);
-                resolve(post);
-                console.log(post);
             });
         },
         update: function (id, updateData) {
             return new Promise(function (resolve, reject) {
                 var updateRow = $.ajax(entryURL, updateSettings).done(function(){
                     $.ajax(entryURL).done(function(data){
-                        return data;
+                        $.each(updateRow, function (index) {
+                            if (this.id == id) {
+                                data[index] = updateData;
+                                resolve(updateRow);
+                            }
+                        });
                     })
-                });
-                $.each(updateRow, function (index) {
-                    if (this.id == id) {
-                        data[index] = updateData;
-                        resolve(updateRow);
-                    }
                 });
             });
         },
         delete: function (id) {
             return new Promise(function (resolve, reject) {
-                var deleteFromTable = $.ajax(entryURL, postSettings).done(function(){
-                    $.ajax(entryURL).done(function(data){
-                        return data;
-                    })
+                $.ajax(entryURL + '/' + id, deleteSettings).done(function(data){
+                    resolve();
                 })
-                $.each(data, function (index) {
-                    if (this.id == id) {
-                        data.splice(index, 1);
-                        resolve(data);
-                    }
-                });
             });
         }
     };
