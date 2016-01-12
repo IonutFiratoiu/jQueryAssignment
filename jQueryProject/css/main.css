@@ -18,3 +18,23 @@ tbody {
 .star.hover {
     color: gold;
 }
+
+.form .editing, .form.editing .adding{
+    display: none;
+}
+
+.form.editing .editing{
+    display: block;
+}
+
+.loader{
+    display: none;
+}
+
+.show-loading{
+    display: block;
+}
+
+tfoot {
+    text-align: center;
+}

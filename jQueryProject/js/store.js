@@ -1,20 +1,4 @@
 var store = (function () {
-    // private
-    /*var data = [
-        {
-            city: 'Bucharest',
-            visited: 1,
-            stars: 4,
-            id: 1
-        },
-        {
-            city: 'Amsterdam',
-            visited: 0,
-            stars: 3,
-            id: 2
-        }
-    ];*/
-
     var entryURL = "http://server.godev.ro:8080/api/ionut/entries";
 
     var getSettings = {
@@ -35,15 +19,24 @@ var store = (function () {
     return {
         getAll: function () {
             return new Promise(function (resolve, reject) {
-                $.ajax(entryURL, getSettings).done(function(data){
+                $.ajax(entryURL, getSettings).done(function (data) {
                     resolve(data.list);
+                }).fail(function (xhr) {
+                    reject(xhr.responseJSON);
                 });
+            });
+        },
+        getPage: function (){
+            return new Promise(function (resolve, reject) {
+                $.ajax(entryURL, getSettings).done(function (data)  {
+                    resolve(data.page);
+                })
             });
         },
         get: function (id) {
             return new Promise(function (resolve, reject) {
-                $.ajax(entryURL + '/' + id, getSettings).done(function(data){
-                    resolve(data.list);
+                $.ajax(entryURL + '/' + id, getSettings).done(function (data) {
+                    resolve(data);
                 });
             });
         },
@@ -55,33 +48,35 @@ var store = (function () {
                         'Content-Type': 'application/json'
                     },
                     data: JSON.stringify(item)
-                }).done(function(){
-                    $.ajax(entryURL).done(function(data){
-                        //data.push(item);
+                }).done(function () {
+                    $.ajax(entryURL).done(function (data) {
                         resolve(data);
                     })
-                }).error(function(xhr){
+                }).fail(function (xhr) {
                     reject(xhr.responseJSON);
                 });
             });
         },
         update: function (id, updateData) {
             return new Promise(function (resolve, reject) {
-                var updateRow = $.ajax(entryURL, updateSettings).done(function(){
-                    $.ajax(entryURL).done(function(data){
-                        $.each(updateRow, function (index) {
-                            if (this.id == id) {
-                                data[index] = updateData;
-                                resolve(updateRow);
-                            }
-                        });
-                    })
+                $.ajax(entryURL + '/' + id, {
+                    type: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify(updateData)
+                }).done(function (data) {
+                    data[id] = updateData;
+                    resolve(data[id]);
+                }
+                ).fail(function (xhr) {
+                    reject(xhr.responseJSON);
                 });
             });
         },
         delete: function (id) {
             return new Promise(function (resolve, reject) {
-                $.ajax(entryURL + '/' + id, deleteSettings).done(function(data){
+                $.ajax(entryURL + '/' + id, deleteSettings).done(function (data) {
                     resolve();
                 })
             });
