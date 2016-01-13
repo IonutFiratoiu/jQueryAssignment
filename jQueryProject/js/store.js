@@ -17,27 +17,18 @@ var store = (function () {
 
     //public
     return {
-        getAll: function () {
+        getAll: function (page, sortField, sortDir) {
             return new Promise(function (resolve, reject) {
-                $.ajax(entryURL, getSettings).done(function (data) {
-                    resolve(data.list);
-                }).fail(function (xhr) {
-                    reject(xhr.responseJSON);
-                });
-            });
-        },
-        getPage: function (){
-            return new Promise(function (resolve, reject) {
-                $.ajax(entryURL, getSettings).done(function (data)  {
-                    resolve(data.page);
-                })
+                $.ajax(entryURL + '?page=' + page + '&sortField=' + sortField + '&sortDir=' + sortDir, getSettings).done(function (data) {
+                    resolve(data);
+                }).fail(reject);
             });
         },
         get: function (id) {
             return new Promise(function (resolve, reject) {
                 $.ajax(entryURL + '/' + id, getSettings).done(function (data) {
                     resolve(data);
-                });
+                }).fail(reject);
             });
         },
         add: function (item) {
@@ -52,9 +43,7 @@ var store = (function () {
                     $.ajax(entryURL).done(function (data) {
                         resolve(data);
                     })
-                }).fail(function (xhr) {
-                    reject(xhr.responseJSON);
-                });
+                }).fail(reject);
             });
         },
         update: function (id, updateData) {
@@ -69,16 +58,14 @@ var store = (function () {
                     data[id] = updateData;
                     resolve(data[id]);
                 }
-                ).fail(function (xhr) {
-                    reject(xhr.responseJSON);
-                });
+                ).fail(reject);
             });
         },
         delete: function (id) {
             return new Promise(function (resolve, reject) {
                 $.ajax(entryURL + '/' + id, deleteSettings).done(function (data) {
                     resolve();
-                })
+                }).fail(reject);
             });
         }
     };

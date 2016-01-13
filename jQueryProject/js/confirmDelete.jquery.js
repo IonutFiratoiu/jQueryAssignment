@@ -17,13 +17,10 @@ $.fn.confirmDelete = function(options) {
                     options.onConfirm.call(this);
                 }else{
                     options.onReject.call(this);
-                };
+                }
 
                 return false;
-            })
-
-            //aici construiesc obiectele
-            //si ascult evenimente
+            });
         } else {
             if (methods.hasOwnProperty(options)) {
                 methods[options].call(this);

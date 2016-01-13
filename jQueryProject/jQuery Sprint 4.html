@@ -10,7 +10,7 @@
 <body>
 <script type="text/html" id="tpl">
     <tr data-id="<%=id%>">
-        <td><%=name%></td>
+        <td class="city-name"><%=name%></td>
         <td><%=stars%></td>
         <td><%=visited%></td>
         <td>
@@ -47,9 +47,9 @@
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>City</th>
-                <th>Stars</th>
-                <th>Visited</th>
+                <th>City  <span class="sort sort-city"><a href="#" class="ascendant">▲</a> <a href="#" class="descendant">▼</a></span></th>
+                <th>Stars  <span class="sort sort-stars"><a href="#" class="ascendant">▲</a> <a href="#" class="descendant">▼</a></spancl></th>
+                <th>Visited  <span class="sort sort-visited"><a href="#" class="ascendant">▲</a> <a href="#" class="descendant">▼</a></span></th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -58,21 +58,30 @@
             <tfoot>
             <tr>
                 <td colspan="4">
-                    <span class="back"><a href="#"><<  </a></span>
-                    <span class="current-page"></span>
-                    <span class="forward"><a href="#">  >></a></span>
+                    Page:  <span class="back"><a href="#"><<  </a></span><span class="current-page"></span><span class="forward"><a href="#">  >></a></span> of <span class="total-pages"></span>
                 </td>
             </tr>
             </tfoot>
         </table>
     </div>
-    <div class="loader"></div>
+    <div class="loader">
+
+    </div>
+    <div class="giphy clearfix" hidden>
+        <span>
+            <a href="#" class="close-giphy">&#10006</a>
+        </span>
+        <div class="giphy-place">
+            <img>
+        </div>
+    </div>
 </div>
 <script src="js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="js/template.js"></script>
 <script type="text/javascript" src="js/store.js"></script>
 <script type=" text/javascript" src="js/confirmDelete.jquery.js"></script>
 <script type=" text/javascript" src="js/stele.jquery.js"></script>
+<script type=" text/javascript" src="js/giphy.js"></script>
 <script type=" text/javascript" src="js/main.js"></script>
 </body>
 </html>
