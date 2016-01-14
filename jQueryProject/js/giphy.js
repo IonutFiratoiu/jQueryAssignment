@@ -13,6 +13,7 @@ var giphy = (function () {
         getGiphy: function (q) {
             return new Promise(function (resolve, reject) {
                 $.ajax(giphyURL + q + giphyURL2, giphySettings).done(function (data) {
+
                     if(data.data[0] != null) {
                         resolve(data.data[0].images.downsized.url);
                     }else{

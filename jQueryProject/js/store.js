@@ -1,5 +1,5 @@
 var store = (function () {
-    var entryURL = "http://server.godev.ro:8080/api/ionut/entries";
+    var entryURL = "http://server.godev.ro:8080/api/ionut";
 
     var getSettings = {
         type: 'GET',
@@ -15,20 +15,31 @@ var store = (function () {
         }
     };
 
-    //public
     return {
         getAll: function (page, sortField, sortDir) {
             return new Promise(function (resolve, reject) {
                 $.ajax(entryURL + '?page=' + page + '&sortField=' + sortField + '&sortDir=' + sortDir, getSettings).done(function (data) {
                     resolve(data);
-                }).fail(reject);
+                }).fail(function (xhr) {
+                    if(xhr.status == "409"){
+                        reject(responseJson.error);
+                    }else{
+                        reject("Unknown error occurring!!");
+                    };
+                });
             });
         },
         get: function (id) {
             return new Promise(function (resolve, reject) {
                 $.ajax(entryURL + '/' + id, getSettings).done(function (data) {
                     resolve(data);
-                }).fail(reject);
+                }).fail(function (xhr) {
+                    if(xhr.status == "409"){
+                        reject(responseJson.error);
+                    }else{
+                        reject("Unknown error occurring!!");
+                    };
+                });
             });
         },
         add: function (item) {
@@ -43,7 +54,13 @@ var store = (function () {
                     $.ajax(entryURL).done(function (data) {
                         resolve(data);
                     })
-                }).fail(reject);
+                }).fail(function (xhr) {
+                    if(xhr.status == "409"){
+                        reject(responseJson.error);
+                    }else{
+                        reject("Unknown error occurring!!");
+                    };
+                });
             });
         },
         update: function (id, updateData) {
@@ -58,14 +75,26 @@ var store = (function () {
                     data[id] = updateData;
                     resolve(data[id]);
                 }
-                ).fail(reject);
+                ).failfunction (xhr) {
+                    if(xhr.status == "409"){
+                        reject(responseJson.error);
+                    }else{
+                        reject("Unknown error occurring!!");
+                    };
+                });
             });
         },
         delete: function (id) {
             return new Promise(function (resolve, reject) {
                 $.ajax(entryURL + '/' + id, deleteSettings).done(function (data) {
                     resolve();
-                }).fail(reject);
+                }).fail(function (xhr) {
+                    if(xhr.status == "409"){
+                        reject(responseJson.error);
+                    }else{
+                        reject("Unknown error occurring!!");
+                    };
+                });
             });
         }
     };
