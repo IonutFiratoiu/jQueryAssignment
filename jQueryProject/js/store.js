@@ -1,100 +1,68 @@
 var store = (function () {
-    var entryURL = "http://server.godev.ro:8080/api/ionut";
+    var entryURL = "http://server.godev.ro:8080/api/ionut/entries";
 
-    var getSettings = {
+    var defaults = {
         type: 'GET',
         headers: {
             'Content-Type': 'application/json'
         }
     };
 
-    var deleteSettings = {
-        type: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        }
+    var getErrorHandler = function(reject) {
+        return function(xhr) {
+            if(xhr.status == "409"){
+                reject(xhr.responseJSON.error);
+            }else{
+                reject("Unknown error occurring!!");
+            }
+        };
     };
 
     return {
         getAll: function (page, sortField, sortDir) {
             return new Promise(function (resolve, reject) {
-                $.ajax(entryURL + '?page=' + page + '&sortField=' + sortField + '&sortDir=' + sortDir, getSettings).done(function (data) {
+                $.ajax(entryURL + '?page=' + page + '&sortField=' + sortField + '&sortDir=' + sortDir, defaults).done(function (data) {
                     resolve(data);
-                }).fail(function (xhr) {
-                    if(xhr.status == "409"){
-                        reject(responseJson.error);
-                    }else{
-                        reject("Unknown error occurring!!");
-                    };
-                });
+                }).error(getErrorHandler(reject));
             });
         },
         get: function (id) {
             return new Promise(function (resolve, reject) {
-                $.ajax(entryURL + '/' + id, getSettings).done(function (data) {
+                $.ajax(entryURL + '/' + id, defaults).done(function (data) {
                     resolve(data);
-                }).fail(function (xhr) {
-                    if(xhr.status == "409"){
-                        reject(responseJson.error);
-                    }else{
-                        reject("Unknown error occurring!!");
-                    };
-                });
+                }).error(getErrorHandler(reject));
             });
         },
         add: function (item) {
             return new Promise(function (resolve, reject) {
-                $.ajax(entryURL, {
+                $.ajax(entryURL, $.extend({}, defaults, {
                     type: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
                     data: JSON.stringify(item)
-                }).done(function () {
-                    $.ajax(entryURL).done(function (data) {
-                        resolve(data);
+                })).done(function () {
+                    $.ajax(entryURL).done(function () {
+                        resolve(item);
                     })
-                }).fail(function (xhr) {
-                    if(xhr.status == "409"){
-                        reject(responseJson.error);
-                    }else{
-                        reject("Unknown error occurring!!");
-                    };
-                });
+                }).error(getErrorHandler(reject));
             });
         },
         update: function (id, updateData) {
             return new Promise(function (resolve, reject) {
-                $.ajax(entryURL + '/' + id, {
+                $.ajax(entryURL + '/' + id, $.extend({}, defaults, {
                     type: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
                     data: JSON.stringify(updateData)
-                }).done(function (data) {
-                    data[id] = updateData;
-                    resolve(data[id]);
+                })).done(function (data) {
+                        resolve(data);
                 }
-                ).failfunction (xhr) {
-                    if(xhr.status == "409"){
-                        reject(responseJson.error);
-                    }else{
-                        reject("Unknown error occurring!!");
-                    };
-                });
+                ).error(getErrorHandler(reject));
             });
         },
         delete: function (id) {
             return new Promise(function (resolve, reject) {
-                $.ajax(entryURL + '/' + id, deleteSettings).done(function (data) {
+                $.ajax(entryURL + '/' + id, $.extend({}, defaults, {
+                    type: 'DELETE'
+                })).done(function () {
                     resolve();
-                }).fail(function (xhr) {
-                    if(xhr.status == "409"){
-                        reject(responseJson.error);
-                    }else{
-                        reject("Unknown error occurring!!");
-                    };
-                });
+                }).error(getErrorHandler(reject));
             });
         }
     };
