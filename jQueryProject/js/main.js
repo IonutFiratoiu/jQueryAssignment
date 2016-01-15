@@ -145,7 +145,6 @@ var sort = function () {
         });
         fieldSorting = $dataField;
         direction = $dataDirection;
-        console.log($dataDirection)
 
         drawTable(store);
 
@@ -200,8 +199,7 @@ var loadingAjax = function () {
 };
 
 var handleErrors = function (){
-    console.log('aa');
-    /*alert (fail());*/
+    alert (fail());
 };
 
 $(document).ready(function () {
